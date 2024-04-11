@@ -127,9 +127,15 @@ def Create():
             return "Получилась Ошибка"
     else:
         return render_template('create.html')
-@app.route ('/post/<int:id>/delete')
+@app.route ('/delete/<int:id>')
 def Delete(id):
-    return render_template("delete.html")
+    item = Item.query.get(id)
+    try:
+        db.session.delete(item)
+        db.session.commit()
+    except:
+        return "При удалении объекта произошла ошибка"
+    return render_template("detail.html")
 @app.after_request
 def redirect_to_signin(response):
     if response.status_code == 401:
